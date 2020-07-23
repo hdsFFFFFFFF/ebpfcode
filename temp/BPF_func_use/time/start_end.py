@@ -7,7 +7,7 @@ from bcc import BPF
 b = BPF(text = '''
         #include <uapi/linux/ptrace.h>
 
-        BPF_HASH(last):
+        BPF_HASH(last);
 
         int do_trace(struct pt_regs *ctx) {
                 u64 ts, *tsp, delta, key = 0;   
@@ -25,7 +25,7 @@ b = BPF(text = '''
 
                         if (delta < 1000000000) {
                                 //output if time is less than 1 second
-                                bpf_trace_printk('%d\\n', delta / 1000000000);
+                                bpf_trace_printk("%d\\n", delta / 1000000000);
                         }
                         
                         last.delete(&key);
@@ -41,10 +41,10 @@ b = BPF(text = '''
         }
         ''')
 
-b.attach_kprobe(event = b.get_syscall_fnname('sync'), 
+b.attach_kprobe(event = b.get_syscall_fnname('mmap'), 
                                     fn_name = 'do_trace')
 
-print 'Tracing for quick sync`s...Ctrl-C to end '
+print ('Tracing for quick sync`s...Ctrl-C to end ')
 
 #format output
 start = 0   #global variable
@@ -54,9 +54,10 @@ while 1:
     #然后将其作为字段返回
     (task, pid, cpu, flags, ts, ms) = b.trace_fields()
     if start == 0:
-        start = ts
+        start = ts  #ts是trace_fields()读出来的
     ts = ts - start
-
+    print('At time %.2fs:mutiple syncs detectd, last %s ms ago' % (ts, ms))
+    #%.2fs中，f表示float，s表示输出的数字后面带s
 
 
 
