@@ -42,6 +42,8 @@ int kprobe__sys_clone(void *ctx) //kprobe__是前缀，用于给内核函数创�
     //kernel trace buffer就是/sys/kernel/debug/tracing/trace_pipe
     
     bpf_trace_printk("hello, world!\\n");
+    //bpf_trace_printk()使用类似“追加写入”的方式向trace_pipe文件写入字符串内容
+    //可以使用trace_print(fmt = '{number}')的方式单独读取bpf_trace_printk()写入的内容
 
     return 0;   //return 0是必要的，不同的内核挂钩点会根据return的值，作不同的处理。如果为定义  \
                 //返回值，可能会导致奇怪的性能表现。

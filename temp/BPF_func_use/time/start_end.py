@@ -31,6 +31,7 @@ b = BPF(text = '''
                         last.delete(&key);
                 }
                 
+                bpf_trace_printk("%d", key);
                 //update stored timestamp
                 ts = bpf_ktime_get_ns();
                 last.update(&key, &ts);
