@@ -13,17 +13,17 @@ b = BPF(text = '''
                 u64 count = 0;
                 u64 *val_ptr;
                 
-        bpf_trace_printk("first key value:%llu\\n", key);
+        bpf_trace_printk("first key value:%llu count:%d\\n", key, count);
 
                 val_ptr = event.lookup(&key);
                 if (val_ptr) {
                         count++;
                         event.delete(&key);
-        bpf_trace_printk("after delete key value:%llu\\n", key);
+        bpf_trace_printk("after delete key value:%llu count:%d\\n", key, count);
                 }
 
         event.update(&key, &count);
-        bpf_trace_printk("after update key value:%llu\\n", key);
+        bpf_trace_printk("after update key value:%llu count:%d\\n", key, count);
 
         return 0;
         }

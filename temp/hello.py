@@ -2,6 +2,12 @@
 # coding=utf-8
 
 from bcc import BPF
+#从bcc package中导入BPF类，BPF是基类
+# 通过BPF()来实例化一个对象，这个对象就是eBPF程序。
+# BPF()实例化对象的时候，会调用叫做__init__(self)的构造函数
+#bcc是一个python的package,路径如下：
+#   /usr/lib/python2.7/dist-packages/bcc
+#python的package一个典型的特征就是在package中一定有一个__init__.py的模块。
 
 #ebpf program
 # 整个eBPF程序都包含在program变量中，这是在
@@ -35,6 +41,7 @@ program = '''
  *                          [...]
  *          }
  */
+
 int kprobe__sys_clone(void *ctx) //kprobe__是前缀，用于给内核函数创建一个kprobe
 {                                //ctx有参数，但是由于我们不在这里使用它们，因此我们将其转换为void *
     //当调用sys_clone并触发该kprobe时，eBPF程序运行
