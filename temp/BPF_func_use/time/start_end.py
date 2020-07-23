@@ -54,6 +54,8 @@ while 1:
     #trace_fields()的作用就是从trace_pipe文件中读取一行
     #然后将其作为字段返回
     (task, pid, cpu, flags, ts, ms) = b.trace_fields()
+    #ms的值来自于BPF program中由bpf_trace_printk()“追加”
+    #写入到trace_pipe中的delta
     if start == 0:
         start = ts  #ts是trace_fields()读出来的
     ts = ts - start

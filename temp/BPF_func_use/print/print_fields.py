@@ -28,6 +28,8 @@ print '%-18s %-16s %-6s %s' %   \
 while 1:
     try:
         (task, pid, cpu, flags, ts, msg) = b.trace_fields()
+        #前5个(task, pid, cpu, flags, ts)是trace_pipe默认有的
+        #第6个开始，是bpf_trace_printk()以类似追加的方式写入trace_pipe的
     except ValueError:
         continue
     #print '%-18.9f %-16s %-6d %s' % (ts, task, pid, msg)
