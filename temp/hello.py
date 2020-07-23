@@ -36,14 +36,15 @@ program = '''
  *          }
  */
 int kprobe__sys_clone(void *ctx) //kprobe__是前缀，用于给内核函数创建一个kprobe
-{
+{                                //ctx有参数，但是由于我们不在这里使用它们，因此我们将其转换为void *
     //当调用sys_clone并触发该kprobe时，eBPF程序运行
     //bpf_trace_printk()打印“hello world”到内核的trace buffer(跟踪缓冲区)。
     //kernel trace buffer就是/sys/kernel/debug/tracing/trace_pipe
     
     bpf_trace_printk("hello, world!\\n");
 
-    return 0;
+    return 0;   //return 0是必要的，不同的内核挂钩点会根据return的值，作不同的处理。如果为定义  \
+                //返回值，可能会导致奇怪的性能表现。
 }
 '''
 
