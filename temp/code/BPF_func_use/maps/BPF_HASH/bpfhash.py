@@ -84,5 +84,10 @@ while True:
         (task, pid, cpu, flags, ts, msg) = b.trace_fields()
         (bytes_s, bflags_s, us_s) = msg.split()
 
+        #int():将一个字符串或数字转换为整型
+        #int(x, base=10):x表示字符串或数字，base表示进制数，默认十进制
+        #int(3.6) = 3
+        #int('12', 16)：如果是带着参数base的话，12要以字符串的形式
+        # 进行输入，
         if int(bflags_s, 16) & REQ_WRITE:
             type_s = b'w'
