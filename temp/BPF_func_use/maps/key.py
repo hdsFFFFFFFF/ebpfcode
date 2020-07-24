@@ -6,7 +6,14 @@ from bcc import BPF
 b = BPF(text = '''
         #include <uapi/linux/ptrace.h>
 
+        //BPF_HASH(name[,key_type[,leaf_type[,size]]])
+        //defaults:BPF_HASH(name, key_type=u64, leaf_type=u64, size=10240)
         BPF_HASH(event);
+        //event是hash table的名字。
+        //event后，没有别的参数。表示key的类型采用默认的u64。
+        //if need to modify the key type, set as:struct request*
+        //means that key has new type, new type is 'struct request*'
+        //remember key is a pointer!!!
 
         int kprobe__sys_clone(void *ctx) {
                 u64 key = 0;
