@@ -29,11 +29,13 @@ b = BPF(text = '''
         bpf_trace_printk("after delete key value:%llu count:%d\\n", key, count);
                 }
 
-        event.update(&key, &count);
+        event.update(&key, &count); //修改变量的值要通过引用传递，&variable_name
+        
         bpf_trace_printk("after update key value:%llu count:%d\\n", key, count);
 
         return 0;
         }
         ''')
 
-b.trace_print(fmt = '{5}')
+#b.trace_print(fmt = '{5}')
+b.trace_print()
