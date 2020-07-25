@@ -118,5 +118,6 @@ while True:
         ms = float(int(us_s, 10)) / 1000
 
         print(b'%-18.9f %-2s %-7s %8.2f' % (ts, type_s, bytes_s, ms))
+        #printb(b'%-18.9f %-2s %-7s %8.2f' % (ts, type_s, bytes_s, ms))
     except KeyboardInterrupt:
         exit()
