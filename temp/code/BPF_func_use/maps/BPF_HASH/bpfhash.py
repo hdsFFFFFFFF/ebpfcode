@@ -6,6 +6,11 @@
 
 from __future__ import print_function
 from bcc import BPF
+'''
+printb(s)
+
+print a bytes object to stdout and flush
+'''
 from bcc.utils import printb
 
 REQ_WRITE = 1
