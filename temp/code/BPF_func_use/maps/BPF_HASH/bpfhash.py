@@ -60,6 +60,14 @@ b = BPF(text = '''
                                             req->__data_len, 
                                             req->cmd_flags, 
                                             delta / 1000);
+                        //__data_len，cmd_flags, delta/1000这三个数据会以类似追加的方式写在trace_pipe文件的末尾。
+                        //注意bpf_trace_printk()的打印格式，3个数据之间是由空格分隔，这对于python后期的处理有用
+                        //python会用trace_fields()读取trace_pipe的每个字段，上述的三个字段以对象的形式存在，python会用msg指向这三个数据
+                        //然后单独拿出来msg使用split()进行切片
+                        //切片后会生成一个包含3个字符串的list
+                        //最后用一个三元组来保存这个list里的数据。
+                        //其中，每个元组对应保存一个list中的字符串。
+
                         start.delete(&req); //delete key
                 }
         }
@@ -67,6 +75,11 @@ b = BPF(text = '''
 
 #call class BPF's method:get_kprobe_functions
 if BPF.get_kprobe_functions(b'blk_start_request'):
+#pythn2将string处理为原生的bytes类型，而不是unicode。
+#pyhon3所有的string均是unicode类型。
+#python3.x里默认的str是(python2.x里的)unicode。bytes是(python2.x)的str
+#b""或者b''前缀代表的就是bytes.
+#b'blk_start_request'中的b前缀在python2.x里没有什么具体意义，只是为了兼容python3.c的这种写法
     b.attach_kprobe(event = 'blk_start_request', 
                               fn_name = 'trace_start')
 
@@ -82,12 +95,16 @@ print('%-18s %-2s %-7s %8s' % ('TIME(s)', 'T', 'BYTES', 'LAT(ms)'))
 while True:
     try:
         (task, pid, cpu, flags, ts, msg) = b.trace_fields()
+        #split()以空字符(包含空格，换行\n，制表符\t)对字符串进行切片
+        #msg指向number对象，然后调用number的split()方法
         (bytes_s, bflags_s, us_s) = msg.split()
+        #(bytes_s,bflags_s,us_s)是一个元组
+        #这个元组用来接收切片后的返回值。
 
         #int():将一个字符串或数字转换为整型
         #int(x, base=10):x表示字符串或数字，base表示进制数，默认十进制
         #int(3.6) = 3
         #int('12', 16)：如果是带着参数base的话，12要以字符串的形式
-        # 进行输入，
-        if int(bflags_s, 16) & REQ_WRITE:
+        # 进行输入
+        if int(bflags_s, 16) & REQ_WRITE:   #将16进制的bflags_s转换为十进制数
             type_s = b'w'
