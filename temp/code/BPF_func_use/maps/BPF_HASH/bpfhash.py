@@ -81,6 +81,7 @@ b = BPF(text = '''
         ''')
 
 #call class BPF's method:get_kprobe_functions
+#因为get_kprobe_functions()是BPF类的静态方法
 if BPF.get_kprobe_functions(b'blk_start_request'):
 #开头的b表示这是一个bytes类型，即字节流类型。
 #pythn2将string处理为原生的bytes类型，而不是unicode。
