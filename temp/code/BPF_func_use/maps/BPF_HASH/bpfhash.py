@@ -19,7 +19,7 @@ b = BPF(text = '''
 
         //定义了内核数据结构：struct request
         // 内核路径：/include/linux/blkdev.h
-        #include <blkdev.h>
+        #include <linux/blkdev.h>
 
         //define hash table name:start
         //define key pointer type:struct request *
@@ -43,7 +43,7 @@ b = BPF(text = '''
                 u64 *tsp, delta;
 
                 //return a pointer to its value if it exists,else NULL
-                tsp start.loopup(&req);
+                tsp = start.lookup(&req);
                 if (tsp) {
                         //u64 bpf_ktime_get_ns(void)
                         delta = bpf_ktime_get_ns() - *tsp;
@@ -75,6 +75,7 @@ b = BPF(text = '''
 
 #call class BPF's method:get_kprobe_functions
 if BPF.get_kprobe_functions(b'blk_start_request'):
+#开头的b表示这是一个bytes类型，即字节流类型。
 #pythn2将string处理为原生的bytes类型，而不是unicode。
 #pyhon3所有的string均是unicode类型。
 #python3.x里默认的str是(python2.x里的)unicode。bytes是(python2.x)的str
@@ -83,7 +84,7 @@ if BPF.get_kprobe_functions(b'blk_start_request'):
     b.attach_kprobe(event = 'blk_start_request', 
                               fn_name = 'trace_start')
 
-b.attach_kprobe(event = 'blk_start_request', fn_name = 'trace_start')
+b.attach_kprobe(event = 'blk_mq_start_request', fn_name = 'trace_start')
 b.attach_kprobe(event = 'blk_account_io_completion', 
                               fn_name = 'trace_completion')
 
@@ -107,4 +108,13 @@ while True:
         #int('12', 16)：如果是带着参数base的话，12要以字符串的形式
         # 进行输入
         if int(bflags_s, 16) & REQ_WRITE:   #将16进制的bflags_s转换为十进制数
-            type_s = b'w'
+            type_s = b'W'
+        elif bytes_s == '0':#see blk_fill_rwbs() for logic
+            type_s = b'M'
+        else:
+            type_s = b'R'
+        ms = float(int(us_s, 10)) / 1000
+
+        print(b'%-18.9f %-2s %-7s %8.2f' % (ts, type_s, bytes_s, ms))
+    except KeyboardInterrupt:
+        exit()
