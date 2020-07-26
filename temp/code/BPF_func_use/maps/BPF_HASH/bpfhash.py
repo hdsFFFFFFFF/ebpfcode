@@ -29,6 +29,9 @@ b = BPF(text = '''
         //define hash table name:start
         //define key pointer type:struct request *
         BPF_HASH(start, struct request *);
+        //在hash table中使用指向struct request的指针作为key，这在跟踪中很常见
+        //指向结构体的指针是很好的key，因为它们是唯一的：两个结构体不能有相同的指针地址。
+        //存储时间戳有两个常用的key：指向结构体的指针，和线程id。
 
         /* define probe_1 */
         /*
@@ -37,6 +40,7 @@ b = BPF(text = '''
          */
         //开始的时候触发
         void trace_start(struct pt_regs *ctx, struct request *req) {
+                //struct pt_regs *ctx用于寄存器和BPF上下文
                 //stroed start timestamp 
                 u64 ts = bpf_ktime_get_ns();
 
