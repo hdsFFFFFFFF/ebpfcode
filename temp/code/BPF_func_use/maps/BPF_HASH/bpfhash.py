@@ -19,6 +19,15 @@ b = BPF(text = '''
         /*
          *定义寄存器组的结构体：struct pt_regs
          * 内核路径：/arch/x86/include/uapi/asm/ptrace.h
+         * eBPF使用bpf_load_program()函数来将BPF代码载入内核
+         * bpf_load_program()负责通过参数向内核提供三类信息：
+         *      .BPF程序的类型
+         *      .BPF代码
+         *      .代码运行时所需要的存放log的缓存地址(位于用户空间)
+         * 通过bpf_load_program()的参数bpf_prog_type，可以看到eBPF支持的程序类型
+         *      bpf_prog_type：     BPF_PROG_TYPE_KPROBE
+         *      BPF prog入口参数：  struct pt_regs
+         *      程序类型：          用于kprobe功能的BPF代码
          */
         #include <uapi/linux/ptrace.h>  
 
