@@ -24,7 +24,7 @@ while True:
     try:
         sleep(1)
         for k,v in sorted(b["ctl"].items()):
-            print("%d" % (k.value, v.value))
+            print("%d %5.2fKB" % (k.value, v.value / 1024))
         print
     except KeyboardInterrupt:
             exit()
