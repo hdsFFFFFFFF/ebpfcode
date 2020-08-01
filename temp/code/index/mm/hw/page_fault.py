@@ -6,7 +6,7 @@ from bcc import BPF
 b = BPF(text = '''
         #include <uapi/linux/ptrace.h>
 
-        int kprobe____do_page_fault (struct pt_regs *ctx) {
+        int kprobe__handle_mm_fault (struct pt_regs *ctx) {
                 bpf_trace_printk("hello\\n");
 
                 return 0;
