@@ -3,7 +3,7 @@
 
 from bcc import BPF
 
-global count
+#global count
 
 b = BPF(text = '''
         #include <uapi/linux/ptrace.h>
@@ -13,8 +13,7 @@ b = BPF(text = '''
         static u32 count = 0;
 
         int kprobe__handle_mm_fault (struct pt_regs *ctx) {
-                count++;
-                bpf_trace_printk("call count:%d\\n", count);
+                bpf_trace_printk("hello\\n");
 
                 return 0;
         }
