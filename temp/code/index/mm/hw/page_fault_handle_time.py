@@ -48,7 +48,7 @@ while True:
         #1us = 1000纳秒(ns)
         #1ns = 1000皮秒(ps)
         ms = float(us) / 1000000    
-        print('handle time:%8.4fms\n' % (ms))
+        print('Page Fault handling time:%8.4fms\n' % (ms))
     except KeyboardInterrupt:
         exit()
         
