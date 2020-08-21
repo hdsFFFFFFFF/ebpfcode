@@ -37,5 +37,5 @@ b = BPF(text = '''
         }
         ''')
 
-#b.trace_print(fmt = '{5}')
-b.trace_print()
+b.trace_print(fmt = '{5}')
+#b.trace_print()
