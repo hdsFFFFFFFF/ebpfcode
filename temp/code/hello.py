@@ -5,6 +5,7 @@ from bcc import BPF
 #从bcc package中导入BPF类，BPF是基类
 # 通过BPF()来实例化一个对象，这个对象就是eBPF程序。
 # BPF()实例化对象的时候，会调用叫做__init__(self)的构造函数
+#
 #bcc是一个python的package,路径如下：
 #   /usr/lib/python2.7/dist-packages/bcc
 #python的package一个典型的特征就是在package中一定有一个__init__.py的模块。
