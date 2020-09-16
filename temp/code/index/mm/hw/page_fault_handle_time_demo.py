@@ -29,7 +29,7 @@ b = BPF(text = '''
         int kretprobe__handle_mm_fault(struct pt_regs *ctx)
         {
                 int ret = PT_REGS_RC(ctx);
-                bpf_trace_printk("ret value:%d\\n", ret);
+                bpf_trace_printk("ret value:0x%x\\n", ret);
 
                 ktime_t end;
                 //ktime_t delta, *tsp;
