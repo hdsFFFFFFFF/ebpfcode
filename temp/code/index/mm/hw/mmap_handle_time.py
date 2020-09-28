@@ -29,11 +29,8 @@ b = BPF(text = '''
                 
                 ktime_t delta;
                 ktime_t *tsp = timer.lookup(&pid);
-<<<<<<< HEAD
-                if ((ret >= 0) && (tsp != NULL))
-=======
+
                 if (tsp != NULL)
->>>>>>> faa5daca3f99e3f0d6931985528c8321334e9a9a
                         delta = end - *tsp;
 
                 bpf_trace_printk("%lld\\n", delta);

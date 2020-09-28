@@ -29,7 +29,7 @@ b = BPF(text = '''
                 
                 ktime_t delta;
                 ktime_t *tsp = timer.lookup(&pid);
-                if ((ret >= 0) && (tsp != NULL))
+                if (tsp != NULL)
                         delta = end - *tsp;
 
                 bpf_trace_printk("%lld\\n", delta);
@@ -38,7 +38,7 @@ b = BPF(text = '''
         }
         ''')
 
-print("Tracing for page fault handling time...Ctrl-C to end")
+print("Tracing for brk() memory application delay time...Ctrl-C to end\n")
 
 while True:
     try:
@@ -48,7 +48,7 @@ while True:
         #1us = 1000纳秒(ns)
         #1ns = 1000皮秒(ps)
         ms = float(us) / 1000000    
-        print('Page Fault handling time:%8.4fms\n' % (ms))
+        print('brk() delay time:%8.4fms\n' % (ms))
     except KeyboardInterrupt:
         exit()
         
