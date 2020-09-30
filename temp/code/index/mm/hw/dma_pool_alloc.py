@@ -10,7 +10,7 @@ b = BPF(text = '''
 
         BPF_HASH(timer, u32, ktime_t);
 
-        int kprobe____request_region(struct pt_regs *ctx)
+        int kprobe__dma_pool_alloc(struct pt_regs *ctx)
         {
                 u32 pid = bpf_get_current_pid_tgid();
                 ktime_t start = bpf_ktime_get_ns();
@@ -20,7 +20,7 @@ b = BPF(text = '''
                 return 0;
         }
 
-        int kretprobe____request_region(struct pt_regs *ctx)
+        int kretprobe__dma_pool_alloc(struct pt_regs *ctx)
         {
                 ktime_t end = bpf_ktime_get_ns();
                 int ret = PT_REGS_RC(ctx);
@@ -39,7 +39,7 @@ b = BPF(text = '''
         }
         ''')
 
-print("Tracing for allocating I/O region delay...Ctrl-C to end")
+print("Tracing for allocating DMA region delay...Ctrl-C to end")
 
 while True:
     try:
@@ -49,7 +49,7 @@ while True:
         #1us = 1000纳秒(ns)
         #1ns = 1000皮秒(ps)
         ms = float(us) / 1000000    
-        print('Allocating I/O region delay:%8.4fms\n' % (ms))
+        print('Allocating DMA region delay:%8.4fms\n' % (ms))
     except KeyboardInterrupt:
         exit()
         
