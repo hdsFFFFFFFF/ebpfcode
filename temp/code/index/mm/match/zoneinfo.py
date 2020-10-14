@@ -2,14 +2,21 @@
 # coding=utf-8
 
 import os, sys
+import time
 
-path = "/proc/zoneinfo"
+file_path = "/proc/zoneinfo"
 
-f = open (path)
-line = f.readline()
+fd = open (file_path)
 
-while line:
-    print(line.rstrip())
-    line = f.readline()
+while True:
+    try:
+        time.sleep(1)
+        with fd as file_object:
+            contents = file_object.read()
+            print(contents.rstrip())
+    except IOError:
+        msg = "Sorry, the file does not exist."
+        print(msg)
+    except KeyboardInterrupt:
+        exit()
 
-f.close()
