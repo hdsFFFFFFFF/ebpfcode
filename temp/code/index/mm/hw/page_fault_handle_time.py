@@ -32,7 +32,7 @@ b = BPF(text = '''
                 if ((ret >= 0) && (tsp != NULL))
                         delta = end - *tsp;
 
-                if (delta >= 1000000) { 
+                if (delta >= 10000000) { 
                         bpf_trace_printk("%lld\\n", delta);
                 }
 

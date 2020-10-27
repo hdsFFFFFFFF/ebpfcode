@@ -2,9 +2,6 @@
 # coding=utf-8
 
 from bcc import BPF
-import os
-import sys
-import time
 
 b= BPF(text = '''
        #include <uapi/linux/ptrace.h>
