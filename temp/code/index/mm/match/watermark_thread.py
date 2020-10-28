@@ -39,7 +39,7 @@ def zone_info(thread_name, delay):
 
 try:
     thread.start_new_thread(load_BPF, ("BPF progream", 0))
-    thread.start_new_thread(zone_info, ("zoneinfo", 10))
+    #thread.start_new_thread(zone_info, ("zoneinfo", 10))
 except:
     print"Error:unable to start thread"
 

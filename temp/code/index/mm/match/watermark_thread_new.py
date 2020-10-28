@@ -9,11 +9,9 @@ import thread
 
 def load_BPF(thread_name, delay):
     b = BPF(text = '''
-            #include <uapi/linux/ptrace.h>
-
-            int kprobe_wakeup_kswapd(struct pt_regs *ctx)
+            //#include <uapi/linux/ptrace.h>
+            TRACEPOINT_PROBE(vmscan, mm_vmscan_wakeup_kswapd)
             {
-                    bpf_trace_printk("Tracing for function of wakeup_kswapd...\\n");
                     bpf_trace_printk("WARNING:A zone is low on free memory!\\n");
 
                     return 0;
