@@ -10,7 +10,7 @@ b = BPF(text = '''
         
         BPF_HASH(timer, u32, ktime_t);
       
-        int kprobe__handle_mm_fault(struct pt_regs *ctx)
+        int kprobe__do_swap_page(struct pt_regs *ctx)
         {
                
                 u32 pid = bpf_get_current_pid_tgid();
@@ -21,7 +21,7 @@ b = BPF(text = '''
                 return 0;
         }
    
-        int kretprobe__handle_mm_fault(struct pt_regs *ctx)
+        int kretprobe__do_swap_page(struct pt_regs *ctx)
         {
              
                 ktime_t end = bpf_ktime_get_ns();
@@ -35,7 +35,7 @@ b = BPF(text = '''
                 if ((ret >= 0) && (tsp != NULL))
                         delta = end - *tsp;
          
-                if (delta >= 10000000) {
+                if (delta >= 10000000) {/* 大于10ms的输出 */
                         bpf_trace_printk("%lld\\n", delta);
                 }
 
