@@ -6,7 +6,7 @@ from bcc import BPF
 b = BPF(text = '''
         #include <uapi/linux/ptrace.h>
 
-        int kprobe__vmalloc(struct pt_regs *ctx)
+        int kprobe__ion_buffer_create(struct pt_regs *ctx)
         {
                 bpf_trace_printk("hello...\\n");
                 

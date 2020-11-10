@@ -41,7 +41,7 @@ b = BPF(text = '''
         }
         ''')
 
-print("Tracing for allocating DMA region delay...Ctrl-C to end")
+print("Tracing for allocating CMA region delay...Ctrl-C to end")
 
 while True:
     try:
@@ -51,7 +51,7 @@ while True:
         #1us = 1000纳秒(ns)
         #1ns = 1000皮秒(ps)
         ms = float(us) / 1000000    
-        print('Allocating DMA region delay:%8.4fms\n' % (ms))
+        print('Allocating CMA region delay:%8.4fms\n' % (ms))
     except KeyboardInterrupt:
         exit()
         
