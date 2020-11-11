@@ -21,7 +21,6 @@ b = BPF(text = '''
                 return 0;
         }
 
-        //int kretprobe__dma_alloc_from_contiguous(struct pt_regs *ctx)
         int kretprobe__cma_alloc(struct pt_regs *ctx)
         {
                 ktime_t end = bpf_ktime_get_ns();
