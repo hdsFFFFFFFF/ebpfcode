@@ -10,8 +10,8 @@ b = BPF(text = '''
 
         BPF_HASH(timer, u32, ktime_t);
 
-        //int kprobe__dma_alloc_from_contiguous(struct pt_regs *ctx)
-        int kprobe__cma_alloc(struct pt_regs *ctx)
+        int kprobe__dma_alloc_from_contiguous(struct pt_regs *ctx)
+        //int kprobe__cma_alloc(struct pt_regs *ctx)
         {
                 u32 pid = bpf_get_current_pid_tgid();
                 ktime_t start = bpf_ktime_get_ns();
@@ -21,7 +21,7 @@ b = BPF(text = '''
                 return 0;
         }
 
-        int kretprobe__cma_alloc(struct pt_regs *ctx)
+        int kretprobe__dma_alloc_from_contiguous(struct pt_regs *ctx)
         {
                 ktime_t end = bpf_ktime_get_ns();
                 int ret = PT_REGS_RC(ctx);
